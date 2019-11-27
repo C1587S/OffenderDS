@@ -18,8 +18,7 @@ Descripción del proyecto
 
 - Nombre del Repositorio: ``OffendersDS``.
 - Estructura de carpetas para un proyecto de python: 
-- Dataset original: United States Sentencing Commission Individual O ender Data Sets <[https://kevinhayeswilson.com/data.html]>
-- Descripción de los datos
+- Dataset original: [United States Sentencing Commission Individual Offender Data Sets] (https://kevinhayeswilson.com/data.html).
 
 La Comisión de Sentencias de Estados Unidos, una agencia independiente del órgano judicial 
 The US Sentencing Commission puts out a yearly report which includes every sentence which was meted out in the federal court system. USSC puts these files out in a very non-standard fixed-width format along with SAS and SPSS programs to read them into those programs.
