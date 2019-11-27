@@ -1,10 +1,11 @@
 Offenders Dataset
-Proyecto Final de `Programación para Ciencia de Datos`
+Proyecto Final de ``Programación para Ciencia de Datos``
+
 ========================
 
 A través del siguiente sitio implementamos las siguientes actividades:
 
-1. Crear un repositorio: `ÒffendersDS`.
+1. Crear un repositorio: ``OffendersDS``.
 2. Crear estructura de carpetas para un proyecto en python
 3. Escoger una fuente de datos
 4. Crear un README.md: Describir la fuente de datos. Describir la entidad, estructura de la base de datos, pipeline, instalación,ejecución.
@@ -17,4 +18,4 @@ Dataset original: United States Sentencing Commission Individual O ender Data Se
 
 1. Descripción de los datos
 2. Importar/Cargar los datos
-3. Relaciones en el ``Òffenders Dataset``
+3. Relaciones en el ``Offenders Dataset``
