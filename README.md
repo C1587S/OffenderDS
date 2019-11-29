@@ -7,7 +7,7 @@ Instrucciones para el Proyecto Final de ``Programación para Ciencia de Datos``:
 - [x] Crear estructura de carpetas para un proyecto en python
 - [x] Escoger una fuente de datos
 - [x] Crear un README.md: Describir la fuente de datos. Describir la entidad, estructura de la base de datos, pipeline, instalación,ejecución.
-- [ ] Cargar la base de datos a raw
+- [x] Cargar la base de datos a raw
 - [ ] Crear una versión limpia en cleaned
 - [ ] Crear el esquema semantic
 - [ ] Crear features temporales ligados a la entidad dadas las fechas del evento. Guardarlos en el esquema features
