@@ -1,34 +1,34 @@
-    
     drop table if exists cleaned.sentencias2017 cascade;
-    CREATE TABLE cleaned.sentencias2017 as (select a.AMTTOTAL::int as amttotal, LOWER(b.senttot) as senttot, LOWER(c.senttot0) as senttot0, LOWER(d.sensplt) as sensplt, LOWER(e.sensplt0) as sensplt0, 
-    LOWER(f.timservc) as timservc, LOWER(g.timeserv) as timeserv,LOWER(h.altdum) as altdum, LOWER(i.altmo) as altmo, LOWER(j.citizen) as citizen, LOWER(k.citwhere) as citwhere, LOWER(l.crimhist) as crimhist, 
-    LOWER(m.disposit) as disposit, LOWER(n.district) as district, a.DOBMON::smallint as dobmon, LOWER(o.inout) as inout, LOWER(p.monsex) as monsex, 
-    LOWER(q.neweduc) as neweduc, LOWER(r.newrace) as newrace, LOWER(s.numdepe) as numdepen, LOWER(t.offtypsb) as offtypsb, LOWER(u.present) as present, LOWER(v.sentimp) as sentimp, a.SENTMON::smallint as sentmon, 
-    LOWER(w.typeoths) as typeoths, LOWER(x.years) as years, a.DOBYR::smallint as dobyr, a.SENTYR::smallint as sentyr
+    CREATE TABLE cleaned.sentencias2017 as (select a."AMTTOTAL"::int as total_amount, LOWER(b.senttot0) as imprisonment_length, LOWER(c.senttot0) as senttot0, LOWER(d.senttot0) as sensplt, LOWER(e.senttot0) as total_sentence_length, 
+    LOWER(f.timeservc) as credited_months, LOWER(g.timeserv) as estimated_prison_time,LOWER(h.value) as  alternative_sentence, --LOWER(i.altmo) as alternative_time, 
+	LOWER(j.citizen) as citizenship_status, LOWER(k.citwhere) as country_citizenship, LOWER(l.value) as criminal_history, 
+    LOWER(m.disposit) as sentence_disposition, LOWER(n.district) as district_sentence, a."DOBMON"::smallint as birth_month, LOWER(o.value) as non_prison_sentence, LOWER(p.monsex) as genre, 
+    LOWER(q.neweduc) as education_level, LOWER(r.newrace) as race, LOWER(s.numdepen) as num_dependents, LOWER(t.offtypsb) as offense_type, LOWER(u.present) as presentence_detention_status, LOWER(v.sentimp) as sentence_type, a."SENTMON"::smallint as sentencing_month, 
+    LOWER(w.typeoths) as sentence_type_other, LOWER(x.years) as age_range, a."DOBYR"::smallint as birth_year, a."SENTYR"::smallint as sentencing_year
     FROM raw.sentencias2017 as a
-    LEFT JOIN catalogo_senttot as b ON b.id=a.SENTTOT
-    LEFT JOIN catalogo_senttot0 as c ON c.id=a.SENTTOT0
-    LEFT JOIN catalogo_sensplt as d ON d.id=a.SENSPLT
-    LEFT JOIN catalogo_sensplt0 as e ON e.id=a.SENSPLT0
-    LEFT JOIN catalogo_timservc as f ON f.id=a.TIMSERVC
-    LEFT JOIN catalogo_timeserv as g ON g.id=a.TIMESERV
-    LEFT JOIN catalogo_altdum as h ON h.id=a.ALTDUM
-    LEFT JOIN catalogo_altmo as i ON i.id=a.ALTMO
-    LEFT JOIN catalogo_citizen as j ON j.id=a.CITIZEN
-    LEFT JOIN catalogo_citwhere as k ON k.id=a.CITWHERE
-    LEFT JOIN catalogo_crimhist as l ON l.id=a.CRIMHIST
-    LEFT JOIN catalogo_disposit as m ON m.id=a.DISPOSIT
-    LEFT JOIN catalogo_district as n ON n.id=a.DISTRICT
-    LEFT JOIN catalogo_inout as o ON o.id=a.INOUT
-    LEFT JOIN catalogo_monsex as p ON p.id=a.MONSEX
-    LEFT JOIN catalogo_neweduc as q ON q.id=a.NEWEDUC
-    LEFT JOIN catalogo_newrace as r ON r.id=a.NEWRACE
-    LEFT JOIN catalogo_numdepen as s ON s.id=a.NUMDEPEN
-    LEFT JOIN catalogo_offtypsb as t ON t.id=a.OFFTYPSB
-    LEFT JOIN catalogo_present as u ON u.id=a.PRESENT
-    LEFT JOIN catalogo_sentimp as v ON v.id=a.SENTIMP
-    LEFT JOIN catalogo_typeoths as w ON w.id=a.TYPEOTHS
-    LEFT JOIN catalogo_years as x ON x.id=a.YEARS);
+    LEFT JOIN raw.catalogo_senttot0 as b ON b."id"=a."SENTTOT"
+    LEFT JOIN raw.catalogo_senttot0 as c ON c."id"=a."SENTTOT0"
+    LEFT JOIN raw.catalogo_senttot0 as d ON d."id"=a."SENSPLT"
+    LEFT JOIN raw.catalogo_senttot0 as e ON e."id"=a."SENSPLT0"
+    LEFT JOIN raw.catalogo_timeservc as f ON f."id"=a."TIMSERVC"
+    LEFT JOIN raw.catalogo_timeserv as g ON g."id"=a."TIMESERV"
+    LEFT JOIN raw.catalogo_yes_no as h ON h."id"=a."ALTDUM"
+    --LEFT JOIN raw.catalogo_altmo as i ON i."id"=a."ALTMO"
+    LEFT JOIN raw.catalogo_citizen as j ON j."id"=a."CITIZEN"
+    LEFT JOIN raw.catalogo_citwhere as k ON k."id"=a."CITWHERE"
+    LEFT JOIN raw.catalogo_yes_no as l ON l."id"=a."CRIMHIST"
+    LEFT JOIN raw.catalogo_disposit as m ON m."id"=a."DISPOSIT"
+    LEFT JOIN raw.catalogo_district as n ON n."id"=a."DISTRICT"
+    LEFT JOIN raw.catalogo_yes_no as o ON o."id"=a."INOUT"
+    LEFT JOIN raw.catalogo_monsex as p ON p."id"=a."MONSEX"
+    LEFT JOIN raw.catalogo_neweduc as q ON q."id"=a."NEWEDUC"
+    LEFT JOIN raw.catalogo_newrace as r ON r."id"=a."NEWRACE"
+    LEFT JOIN raw.catalogo_numdepen as s ON s."id"=a."NUMDEPEN"
+    LEFT JOIN raw.catalogo_offtypsb as t ON t."id"=a."OFFTYPSB"
+    LEFT JOIN raw.catalogo_present as u ON u."id"=a."PRESENT"
+    LEFT JOIN raw.catalogo_sentimp as v ON v."id"=a."SENTIMP"
+    LEFT JOIN raw.catalogo_typeoths as w ON w."id"=a."TYPEOTHS"
+    LEFT JOIN raw.catalogo_years as x ON x."id"=a."YEARS");
 
     
   
