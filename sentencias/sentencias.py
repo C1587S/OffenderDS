@@ -69,8 +69,21 @@ def load_sentencias(ctx):
 
 @sentencias.command()
 @click.pass_context
-def to_cleaned():
+def helpers(ctx):
+    query = ctx.obj['queries'].get('helpers')
+    conn=ctx.obj['conn']
+    with conn.cursor() as cur:
+        cur.execute(query)
+    print(query)
+	
+	
+@sentencias.command()
+@click.pass_context
+def to_cleaned(ctx):
     query = ctx.obj['queries'].get('to_cleaned')
+    conn=ctx.obj['conn']
+    with conn.cursor() as cur:
+        cur.execute(query)
     print(query)
 
 @sentencias.command()
