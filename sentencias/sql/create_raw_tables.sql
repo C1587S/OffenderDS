@@ -88,18 +88,7 @@ CREATE TABLE raw.catalogo_district(
 
 comment on table raw.catalogo_district is 'catalogo de valores para la columna district';
      
-    
-drop table if exists raw.catalogo_dobyr;
-
-CREATE TABLE raw.catalogo_dobyr(
-  "id" TEXT,
-  "dobyr" TEXT
-);
-
-comment on table raw.catalogo_dobyr is 'catalogo de valores para la columna dobyr';
- 
- 
-    
+        
 drop table if exists raw.catalogo_monsex;
 
 CREATE TABLE raw.catalogo_monsex(
@@ -150,16 +139,6 @@ CREATE TABLE raw.catalogo_offtypsb(
 
 comment on table raw.catalogo_offtypsb is 'catalogo de valores para la columna offtypsb';
  
- 
-drop table if exists raw.catalogo_newrace;
-
-CREATE TABLE raw.catalogo_newrace(
-  "id" TEXT,
-  "newrace" TEXT
-);
-
-comment on table raw.catalogo_newrace is 'catalogo de valores para la columna newrace';
-
 
 drop table if exists raw.catalogo_present;
 
