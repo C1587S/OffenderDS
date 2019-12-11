@@ -1,7 +1,7 @@
 ﻿id,sentimp
 0,No Prison/Probation (Fine Only)
 1,Prison Only (No Alternatives)
-2, Prison + Confinement Conditions (Alternatives Including Zone C Split Sentences)
+2,Prison + Confinement Conditions (Alternatives Including Zone C Split Sentences)
 3,Probation + Confinement Conditions (Alternatives)
 4,Probation Only
 .,Missing Indeterminable or Inapplicable
