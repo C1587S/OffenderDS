@@ -4,7 +4,8 @@
 	remove_punctuation_marks(replace_slash(LOWER(j.citizen))) as citizenship_status, remove_punctuation_marks(replace_slash(LOWER(k.citwhere))) as country_citizenship, remove_punctuation_marks(LOWER(l.value)) as criminal_history, 
     remove_punctuation_marks(LOWER(m.disposit)) as sentence_disposition, remove_punctuation_marks(LOWER(n.district)) as district_sentence, a."DOBMON"::smallint as birth_month, remove_punctuation_marks(LOWER(o.value)) as non_prison_sentence, remove_punctuation_marks(LOWER(p.monsex)) as genre, 
     remove_punctuation_marks(LOWER(q.neweduc)) as education_level, remove_punctuation_marks(replace_slash(LOWER(r.newrace))) as race, remove_punctuation_marks(LOWER(s.numdepen)) as num_dependents, remove_punctuation_marks(LOWER(t.offtypsb)) as offense_type, remove_punctuation_marks(replace_slash(LOWER(u.present))) as presentence_detention_status, remove_punctuation_marks(replace_slash(replace_plus(LOWER(v.sentimp)))) as sentence_type, a."SENTMON"::smallint as sentencing_month, 
-    remove_punctuation_marks(LOWER(w.typeoths)) as sentence_type_other, remove_punctuation_marks(replace_less_than(replace_greater_than(LOWER(x.years)))) as age_range, a."DOBYR"::smallint as birth_year, a."SENTYR"::smallint as sentencing_year
+    remove_punctuation_marks(LOWER(w.typeoths)) as sentence_type_other, remove_punctuation_marks(replace_less_than(replace_greater_than(LOWER(x.years)))) as age_range, a."DOBYR"::smallint as birth_year, a."SENTYR"::smallint as sentencing_year, make_date("SENTYR"::smallint,"SENTMON"::smallint,01) as sentencing_date,
+    case when "SENTTOT"='470' then '2150-01-01'::date When "SENTTOT" is null then null Else make_date("SENTYR"::smallint,"SENTMON"::smallint,01) + interval '1 month'*"SENTTOT"::float end as sentencing_end_date
     FROM raw.sentencias2017 as a
     LEFT JOIN raw.catalogo_senttot0 as b ON b."id"=a."SENTTOT"
     LEFT JOIN raw.catalogo_senttot0 as c ON c."id"=a."SENTTOT0"
