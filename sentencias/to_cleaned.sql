@@ -1,10 +1,10 @@
     drop table if exists cleaned.sentencias2017 cascade;
-    CREATE TABLE cleaned.sentencias2017 as (select a."AMTTOTAL"::int as total_amount, LOWER(b.senttot0) as imprisonment_length, LOWER(c.senttot0) as senttot0, LOWER(d.senttot0) as sensplt, LOWER(e.senttot0) as total_sentence_length, 
-    LOWER(f.timeservc) as credited_months, LOWER(g.timeserv) as estimated_prison_time,LOWER(h.value) as  alternative_sentence, --LOWER(i.altmo) as alternative_time, 
-	LOWER(j.citizen) as citizenship_status, LOWER(k.citwhere) as country_citizenship, LOWER(l.value) as criminal_history, 
-    LOWER(m.disposit) as sentence_disposition, LOWER(n.district) as district_sentence, a."DOBMON"::smallint as birth_month, LOWER(o.value) as non_prison_sentence, LOWER(p.monsex) as genre, 
-    LOWER(q.neweduc) as education_level, LOWER(r.newrace) as race, LOWER(s.numdepen) as num_dependents, LOWER(t.offtypsb) as offense_type, LOWER(u.present) as presentence_detention_status, LOWER(v.sentimp) as sentence_type, a."SENTMON"::smallint as sentencing_month, 
-    LOWER(w.typeoths) as sentence_type_other, LOWER(x.years) as age_range, a."DOBYR"::smallint as birth_year, a."SENTYR"::smallint as sentencing_year
+    CREATE TABLE cleaned.sentencias2017 as (select a."AMTTOTAL"::int as total_amount, remove_punctuation_marks(LOWER(b.senttot0)) as imprisonment_length, remove_punctuation_marks(LOWER(c.senttot0)) as senttot0, remove_punctuation_marks(LOWER(d.senttot0)) as sensplt, remove_punctuation_marks(LOWER(e.senttot0)) as total_sentence_length, 
+    remove_punctuation_marks(LOWER(f.timeservc)) as credited_months, remove_punctuation_marks(LOWER(g.timeserv)) as estimated_prison_time,remove_punctuation_marks(LOWER(h.value)) as  alternative_sentence, --remove_punctuation_marks(LOWER(i.altmo) as alternative_time, 
+	remove_punctuation_marks(replace_slash(LOWER(j.citizen))) as citizenship_status, remove_punctuation_marks(replace_slash(LOWER(k.citwhere))) as country_citizenship, remove_punctuation_marks(LOWER(l.value)) as criminal_history, 
+    remove_punctuation_marks(LOWER(m.disposit)) as sentence_disposition, remove_punctuation_marks(LOWER(n.district)) as district_sentence, a."DOBMON"::smallint as birth_month, remove_punctuation_marks(LOWER(o.value)) as non_prison_sentence, remove_punctuation_marks(LOWER(p.monsex)) as genre, 
+    remove_punctuation_marks(LOWER(q.neweduc)) as education_level, remove_punctuation_marks(replace_slash(LOWER(r.newrace))) as race, remove_punctuation_marks(LOWER(s.numdepen)) as num_dependents, remove_punctuation_marks(LOWER(t.offtypsb)) as offense_type, remove_punctuation_marks(replace_slash(LOWER(u.present))) as presentence_detention_status, remove_punctuation_marks(replace_slash(replace_plus(LOWER(v.sentimp)))) as sentence_type, a."SENTMON"::smallint as sentencing_month, 
+    remove_punctuation_marks(LOWER(w.typeoths)) as sentence_type_other, remove_punctuation_marks(replace_less_than(replace_greater_than(LOWER(x.years)))) as age_range, a."DOBYR"::smallint as birth_year, a."SENTYR"::smallint as sentencing_year
     FROM raw.sentencias2017 as a
     LEFT JOIN raw.catalogo_senttot0 as b ON b."id"=a."SENTTOT"
     LEFT JOIN raw.catalogo_senttot0 as c ON c."id"=a."SENTTOT0"
