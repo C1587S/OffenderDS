@@ -1,6 +1,6 @@
     drop table if exists cleaned.sentencias2017 cascade;
     CREATE TABLE cleaned.sentencias2017 as (select a."AMTTOTAL"::int as total_amount, remove_punctuation_marks(LOWER(b.senttot0)) as imprisonment_length, remove_punctuation_marks(LOWER(c.senttot0)) as senttot0, remove_punctuation_marks(LOWER(d.senttot0)) as sensplt, remove_punctuation_marks(LOWER(e.senttot0)) as total_sentence_length, 
-    remove_punctuation_marks(LOWER(f.timeservc)) as credited_months, remove_punctuation_marks(LOWER(g.timeserv)) as estimated_prison_time,remove_punctuation_marks(LOWER(h.value)) as  alternative_sentence, --remove_punctuation_marks(LOWER(i.altmo) as alternative_time, 
+    remove_punctuation_marks(LOWER(f.timeservc)) as credited_months, remove_punctuation_marks(LOWER(g.timeserv)) as estimated_prison_time,remove_punctuation_marks(LOWER(h.value)) as  alternative_sentence, remove_punctuation_marks(LOWER(i.altmo)) as alternative_time, 
 	remove_punctuation_marks(replace_slash(LOWER(j.citizen))) as citizenship_status, remove_punctuation_marks(replace_slash(LOWER(k.citwhere))) as country_citizenship, remove_punctuation_marks(LOWER(l.value)) as criminal_history, 
     remove_punctuation_marks(LOWER(m.disposit)) as sentence_disposition, remove_punctuation_marks(LOWER(n.district)) as district_sentence, a."DOBMON"::smallint as birth_month, remove_punctuation_marks(LOWER(o.value)) as non_prison_sentence, remove_punctuation_marks(LOWER(p.monsex)) as genre, 
     remove_punctuation_marks(LOWER(q.neweduc)) as education_level, remove_punctuation_marks(replace_slash(LOWER(r.newrace))) as race, remove_punctuation_marks(LOWER(s.numdepen)) as num_dependents, remove_punctuation_marks(LOWER(t.offtypsb)) as offense_type, remove_punctuation_marks(replace_slash(LOWER(u.present))) as presentence_detention_status, remove_punctuation_marks(replace_slash(replace_plus(LOWER(v.sentimp)))) as sentence_type, a."SENTMON"::smallint as sentencing_month, 
@@ -13,7 +13,7 @@
     LEFT JOIN raw.catalogo_timeservc as f ON f."id"=a."TIMSERVC"
     LEFT JOIN raw.catalogo_timeserv as g ON g."id"=a."TIMESERV"
     LEFT JOIN raw.catalogo_yes_no as h ON h."id"=a."ALTDUM"
-    --LEFT JOIN raw.catalogo_altmo as i ON i."id"=a."ALTMO"
+    LEFT JOIN raw.catalogo_altmo as i ON i."id"=a."ALTMO"
     LEFT JOIN raw.catalogo_citizen as j ON j."id"=a."CITIZEN"
     LEFT JOIN raw.catalogo_citwhere as k ON k."id"=a."CITWHERE"
     LEFT JOIN raw.catalogo_yes_no as l ON l."id"=a."CRIMHIST"
