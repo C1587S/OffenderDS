@@ -39,6 +39,16 @@ CREATE TABLE raw.sentencias2017(
 comment on table raw.sentencias2017 is 'contiene los datos de las sentencias de 2017';
 
 
+drop table if exists raw.catalogo_altmo;
+
+CREATE TABLE raw.catalogo_altmo(
+  "id" TEXT,
+  "altmo" TEXT
+);
+
+comment on table raw.catalogo_altmo is 'catalogo de valores para la columna altmo';
+
+
 drop table if exists raw.catalogo_citwhere;
 
 CREATE TABLE raw.catalogo_citwhere(
