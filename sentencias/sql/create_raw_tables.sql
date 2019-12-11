@@ -1,7 +1,16 @@
-create schema if not exists raw;
-
+ /* 
+ Si no existe, creamos el esquema raw
+ */
+ create schema if not exists raw;
+ 
+ /*
+ Descartamos la tabla sentencias 2017 del esquema cleaned en caso de que ya exista.
+ */
 drop table if exists raw.sentencias2017;
 
+/*
+Creamos la estructura de las tablas del esquema raw (datos y catálogos)
+ */
 CREATE TABLE raw.sentencias2017(
   "AMTTOTAL" TEXT,
   "SENTTOT" TEXT,
