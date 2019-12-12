@@ -40,7 +40,8 @@ CREATE TABLE IF NOT EXISTS semantic.event_sentences AS
                    AND "imprisonment_length" IS NOT NULL
                    AND "imprisonment_length"<>'life' THEN concat('sentenced to', ' ', "imprisonment_length"::float, ' ', 'months in prison')
               WHEN sentence_type = 'prison and confinement conditions '
-                   AND "sensplt" IS NOT NULL THEN concat('sentenced to', ' ', "sensplt"::float, ' ', 'months in prison')
+                   AND "sensplt" IS NOT NULL
+				   AND "sensplt"<>'life' THEN concat('sentenced to', ' ', "sensplt"::float, ' ', 'months in prison')
               WHEN sentence_type = 'probation and confinement conditions '
                    AND "total_sentence_length" IS NOT NULL
                    AND "imprisonment_length"<>'life'
