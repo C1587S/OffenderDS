@@ -1,4 +1,12 @@
-    drop table if exists cleaned.sentencias2017 cascade;
+ /* 
+ Descartamos la tabla sentencias 2017 del esquema cleaned en caso de que ya exista.
+ */
+ drop table if exists cleaned.sentencias2017 cascade;
+  /*
+ Creamos una nueva tabla con valores comprensibles a simple vista, (en lugar de valores codificados) mediante left joins con las tablas de catálogos.
+ Renombramos las columnas para darles más sentido -siempre que fue posible.
+ Se limpian los valores obtenidos de los catálogos, quitando o reemplazando puntuación y símbolos, y convirtiendo el texto a minúsculas, apoyándonos en las funciones definidas en helpers.sql
+ */
     CREATE TABLE cleaned.sentencias2017 as (select row_number() over() as offender, a."AMTTOTAL"::int as total_amount, remove_punctuation_marks(LOWER(b.senttot0)) as imprisonment_length, remove_punctuation_marks(LOWER(c.senttot0)) as senttot0, remove_punctuation_marks(LOWER(d.senttot0)) as sensplt, remove_punctuation_marks(LOWER(e.senttot0)) as total_sentence_length, 
     remove_punctuation_marks(LOWER(f.timeservc)) as credited_months, remove_punctuation_marks(LOWER(g.timeserv)) as estimated_prison_time,remove_punctuation_marks(LOWER(h.value)) as  alternative_sentence, remove_punctuation_marks(LOWER(i.altmo)) as alternative_time, 
 	remove_punctuation_marks(replace_slash(LOWER(j.citizen))) as citizenship_status, remove_punctuation_marks(replace_slash(LOWER(k.citwhere))) as country_citizenship, remove_punctuation_marks(LOWER(l.value)) as criminal_history, 
