@@ -90,8 +90,8 @@ Carga las funciones auxiliares definidas en el archivo helpers.sql
     with conn.cursor() as cur:
         cur.execute(query)
     print(query)
-	
-	
+
+
 @sentencias.command()
 @click.pass_context
 def to_cleaned(ctx):
@@ -106,11 +106,14 @@ Genera la conexión a la base de datos, ejecuta e imprime el query to_cleaned, q
 
 @sentencias.command()
 @click.pass_context
-def to_semantic():
+def to_semantic(ctx):
 """
 Genera la conexión a la base de datos, ejecuta e imprime el query to_semantic, que crea las tablas del esquema semantic a partir de las tablas del esquema cleaned
 """
     query = ctx.obj['queries'].get('to_semantic')
+    conn=ctx.obj['conn']
+    with conn.cursor() as cur:
+        cur.execute(query)
     print(query)
 
 @sentencias.command()
