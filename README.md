@@ -8,9 +8,9 @@ Este proyecto cuenta con licencia conforme a los términos de la licencia MIT.
 
 **Información de Contacto:**
 
--   Pinto Veizaga Daniela, github username: [dapivei](https://github.com/dapivei)     
+-   Pinto Veizaga Daniela, [dapivei](https://github.com/dapivei)     
 -   Rodríguez Sánchez Elizabeth, [erodriguezul](https://github.com/erodriguezul)
--   Muñoz Sancen Maggie,  [maggiemusa](https://github.com/maggiemusa)
+-   Muñoz Sancén Margarita,  [maggiemusa](https://github.com/maggiemusa)
 -   Cadavid Sánchez Sebastían, [C1587S](https://github.com/C1587S)
 
 **Procedimiento:**
@@ -24,7 +24,7 @@ Este proyecto cuenta con licencia conforme a los términos de la licencia MIT.
 -   [x] Cargar la base de datos a raw
 -   [x] Crear una versión limpia en cleaned
 -   [x] Crear el esquema semantic
--   [ ] Crear features temporales ligados a la entidad dadas las fechas del evento. Guardarlos en el esquema features.
+-   [ ] Crear features temporales ligados a la entidad dadas las fechas del evento. Guardarlos en el esquema features().
     </div>
 
 **Índice:**
@@ -32,7 +32,8 @@ Este proyecto cuenta con licencia conforme a los términos de la licencia MIT.
 1.  [ Propósito del Proyecto. ](#PROP)
 2.  [ Descripción del problema: sobrepoblación de las cárceles.](#SOBRE)
 3.  [ Supuestos Básicos. ](#SUP)
-4.  [ Guía Replicabilidad. ](#REPLI)
+4.  [ Guía para Replicabilidad. ](#REPLI)
+5.  [Anexos.](#ANEXOS)
 
 * * *
 
@@ -105,7 +106,7 @@ A su vez, los diversos distritos estadounidenses, enfrentan mayores presiones pr
 
 En la realización de este proyecto partimos de varios supuestos básicos:
 
-**3.1.** Cada registro, correspondiente a las sentencias emitidas en un año fiscal determinado, corresponden a uno y SOLO UN acusado. Es decir, más de una sentencia en un mismo año no puede corresponder al mismo acusado. Con ese supuesto inicial, pero necesario, hechamos a andar el _workflow_ de trabajo.
+**3.1.** Cada registro, correspondiente a las sentencias emitidas en un año fiscal determinado, corresponden a uno y SOLO UN acusado. Es decir, más de una sentencia en un mismo año no puede corresponder al mismo acusado. Con ese supuesto inicial, pero necesario, echamos a andar el _workflow_ de trabajo.
 
 **3.2.** Al no contar con el día exacto de la sentencia (únicamente tenemos el mes y el año de cada sentencia), consideramos el primer día de cada mes como el día de la sentencia; dicha inclusión nos fue útil para la construcción de la variable _sentencing_date_, insumo principal para el la construcción de eventos, asociadas a la entidad.
 
@@ -113,14 +114,18 @@ En la realización de este proyecto partimos de varios supuestos básicos:
 
 <a name="REPLI"></a>
 
-## 4. Guía Replicabilidad
+## 4. Guía para Replicabilidad
 
 <div align="justify">
 
-**4.0** Carga de base de Datos
+**4.0** Obtención de variables de interés
+
+Considerando que el presente trabajo es un primer ejercicio para un futuro análisis más sólido, en el presente trabajo nos concentramos en solamente algunas variables de interés, corrrespondiente a las sentencias dictaminadas durante el año fiscal 2017. Las variables de interés fueron recabas a través de la terminal, con el siguiente comando:
 
 ```{bash}
-cut -d',' -f72,73,87,132,158,182,128,126,191,328,213,79,88,268,44,45,212,59,60,39,46,47,49,48,227,177,189,248,181,197,86 opafy17nid.csv>sentencias2017.csv--
+cut -d',' -f72,73,87,132,158,182,128,126,191,328,213,79,
+88,268,44,45,212,59,60,39,46,47,49,48,227,177,
+189,248,181,197,86 opafy17nid.csv>sentencias2017.csv--
 ```
 
 **4.1** Inicializar vagrant:
@@ -132,68 +137,77 @@ cut -d',' -f72,73,87,132,158,182,128,126,191,328,213,79,88,268,44,45,212,59,60,3
 
 **4.2** Crear la base de datos en SQLite
 
-Una vez situados en la carpeta donde tenemos el csv con la información a cargar.
+Una vez situados en la carpeta donde tenemos el *.csv*, con la información a cargar, ejecutamos los siguientes comandos:
 
+```
     ➜  ~ cd /
     ➜  / cd data/sentencias
+```
 
-Una vez ahí, vemos que nuestro cursor ha cambiado a `➜  sentencias` . Ahora creamos la base sentencias.db
-
+Una vez ahí, vemos que nuestro cursor ha cambiado a `➜  sentencias` . Ahora, creamos la base `sentencias.db`.
+```
 `sqlite3 sentencias.db`
+```
 
-Con esto, vemos que el cursor cambia a `sqlite>`
-Importamos el csv que hemos preparado:
+Vemos que el cursor cambia a `sqlite>`. Importamos el .csv que hemos preparado en el **4.0**
 
+```
     sqlite> .mode csv
     sqlite> .separator ","
     sqlite> .import sentencias2017.csv sentencias2017
     sqlite> .tables
     sqlite> .schema
     sqlite>
+```
 
 Con esto podemos actualizar el archivo
-create_raw_tables.sql ubicado dentro de la carpeta data/sentencias.
+create_raw_tables.sql, ubicado dentro de la carpeta data/sentencias.
 
-Usamos Ctrl + D para salir de SQLite
+Usamos `Ctrl + D`,  para salir de SQLiteel cursor vuelve a ser `➜  sentencias`.
 
-el cursor vuelve a ser `➜  sentencias`.
 
-\##Creación de base de datos en PostgreSQL
+**4.3** Creación de base de datos en PostgreSQL
 
 Cambiamos al usuario postgres
 
+```
     sudo su postgres
+```
 
 Tecleamos `psql` para iniciar el cliente de base de datos.
-
-`psql`
+```
+psql
+```
 
 Con esto, el cursor ha cambiado a `postgres=#`.
 
 Ahora creamos la base de datos sentencias, junto con el rol, al que asignamos los permisos necesarios:
 
+```
     create database sentencias;
     create role sentencias login;
     alter role sentencias with encrypted password 'sentencias';
     grant all privileges on database sentencias to sentencias;
-
+```
 Para ver los roles actualmente creados en el servidor postgres usamos:
-
+```
 <https://github.com/C1587S/OffenderDS/blob/master/imagenes/raw.png>
+```
 
 `postgres=# \du+`
 
 Usamos Ctrl + D, dos veces para volver a vagrant. El cursor es de nuevo `➜  sentencias`
 
-\##Ambiente virtual
-Ahora crearemos en ambiente virtual. Tecleamos:
+**4.4.** Ambiente virtual
+
+Ahora, crearemos un ambiente virtual. Tecleamos:
 
     pyenv virtualenv 3.7.3 sentencias
     echo 'sentencias' > .python-version
 
 Nuestro cursor ahora ha cambiado a `(sentencias) ➜  sentencias`.
 
-\###Instalación de librerías
+**4.5.** Instalación de librerías.
 
     curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
     source $HOME/.poetry/env
@@ -203,8 +217,9 @@ Nuestro cursor ahora ha cambiado a `(sentencias) ➜  sentencias`.
     poetry add psycopg2
     poetry add dynaconf
 
-\##Creación de esquemas y tablas raw
- Ya que hemos actualizado el archivo sentencias.py, lo llamamos para crear los esquemas y tablas raw, mismas que poblamos :
+**4.6.** Creación de esquemas y tablas raw
+
+Ya que hemos actualizado el archivo sentencias.py, lo llamamos para crear los esquemas y tablas raw, mismas que poblamos :
 
     python sentencias.py
     python sentencias.py create-schemas
@@ -236,43 +251,102 @@ Salimos de postgres (`Ctrl+D`) para comenzar la carga de _cleaned_
 
 </div>
 
-**Feature and Cohorts**
+**4.7.** Creando el *query* de semantic
 
+
+```
+python sentencias.py to-semantic
+```
+
+```
+psql- U sentencias -d sentencias -h 0.0.0.0 -W
+```
+Para acceder a la base ya con las tablas entidades cargadas y de eventos también
+
+```
+select * from semantic.entities limit 3
+````
+*Ejemplo de output*
+|offender|country_citizenship|birth_date|genre|race|
+|--|--|--|--|--|
+|1|united_states|1980-11-01|male|black or african american|
+|2|united states|1987-07-01|female|white or caucasian|
+|3|mexico|1992-06-01|male|american indian or alaskan native|
+
+
+**4.8. Tarea futura: feature and Cohorts**
+
+<div align="justify">
 condenados que estuvieran presos hace tres meses o cimientos, que sean extranjeros
 
 filtrado, cuantos van a terminar en los siguientes seis meses.
+
+
+</div>
+
+<a name="ANEXOS"></a>
+## 5. Anexos
+
+*Anexo 1. Variables de la tabla en formato .raw*
+
+<p align="center">
+  <image width="300" height="600" src="https://github.com/C1587S/OffenderDS/blob/master/imagenes/raw.png">
+</p>
+
+*Anexo 2. Variables de la tabla en formato .cleaned*
+
+<p align="center">
+  <image width="300" height="600" src="https://github.com/C1587S/OffenderDS/blob/master/imagenes/raw.png">
+</p>
+
+*Anexo 3. Lista de Schemas*
+
+<p align="center">
+  <image width="400" height="400" src="https://github.com/C1587S/OffenderDS/blob/master/imagenes/list_schemas.jpg">
+</p>
+
+*Anexo 4. Lista de Relaciones*
+
+
+<p align="center">
+  <image width="500" height="700" src="https://github.com/C1587S/OffenderDS/blob/master/imagenes/list_relations.jpg">
+</p>
+
+*Anexo 5. Tabla de Entities*
+
+
+<p align="center">
+  <image width="600" height="300" src="https://github.com/C1587S/OffenderDS/blob/master/imagenes/entities.jpg">
+</p>
+
+*Anexo 6. Tabla de Evento: sentences*
+
+
+<p align="center">
+  <image width="600" height="300" src="https://github.com/C1587S/OffenderDS/blob/master/imagenes/event_sentences.jpg">
+</p>
+
+
+*Anexo 7. Tabla de Evento: reincidence*
+
+
+<p align="center">
+  <image width="600" height="300" src="https://github.com/C1587S/OffenderDS/blob/master/imagenes/event_reincidence.jpg">
+</p>
+
+*Anexo 8. Tabla de Evento: fine*
+
+<p align="center">
+  <image width="600" height="300" src="https://github.com/C1587S/OffenderDS/blob/master/imagenes/event_fine.jpg">
+</p>
+
 
 <div align="center">
 
 </div>
 
-_Tabla 1. Entities_
 
-<br />
-<div align="center">
-
-| Tipo de Variable    | Variable Asociada   | Descripción                            |
-| ------------------- | ------------------- | -------------------------------------- |
-| Entidad             | offender            | Identifcador del acusado               |
-| Estado              | status              | ¿El acusado se encuentra en la cárcel? |
-| Periodo de Estado   | duration            | Tiempo en la cárcel                    |
-| Variables Estáticas | country_citizenship | País de ciudadanía                     |
-| Variables Estáticas | birth_month         | Mes de nacimiento del acusado          |
-| Variables Estáticas | birth_year          | Año de nacimiento del acusado          |
-| Variables Estáticas | genre               | Género del acusado                     |
-| Variables Estáticas | race                | Raza del acusado                       |
-
-```mermaid
-classDiagram
-    classA <|-- classB
-    classC *-- classD
-    classE o-- classF
-    classG <-- classH
-    classI <.. classJ
-    classK <.. classL
-```
-
-**Generación de atributos**
+*Anexo 9. Generación de atributos*
 
 | categorías de la variable sentence_type | nombre de la variable asociada en raw o valor de asociado | nombre de la variable asociada en clean         |
 | --------------------------------------- | ------------------------------------- | ----------------------------------------------- |
@@ -282,27 +356,9 @@ classDiagram
 | 3. probation +confinement               | senplt0 minus sentot                  | total_sentence_length minus imprisonment_length |
 | 4. probation only                       | sensplot0=0                           | total_sentence_length=0                         |
 
-Sentence
 
 <center>
 </center>
 
-```mermaid
-graph TB
-    subgraph Semantic
 
-    a1-->a2
-    end
-    subgraph Clean
-    b1-->b2
-    end
-    subgraph Raw
-    create_schemas--> create_raw_tables
-    create_raw_tables--> load_sentencias
-    end
-```
-
-
-<p align="center">
-  <image width="600" height="400" src="https://github.com/C1587S/OffenderDS/blob/master/imagenes/raw.png">
-</p>
+<p align="justify">
