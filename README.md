@@ -90,8 +90,7 @@ El hacinamiento carcelario en Estados Unidos repercute en las condiciones de sal
 **Gráfica 2.Probabilidad de Encarcelamiento: Residentes estadounidenses nacidos en 2001**
 
 <p align="center">
-  <image width="600" height="400" src="https://github.com/C1587S/OffenderDS/blob/master/imagenes/probabilidad_encarcelamiento.png
-  ">
+  <image width="600" height="400" src="https://github.com/C1587S/OffenderDS/blob/master/imagenes/probabilidad_encarcelamiento.png">
 </p>
 
 Referencia: Imágen tomada de [The Sentencing Project](https://www.sentencingproject.org/criminal-justice-facts/).
@@ -121,7 +120,7 @@ En la realización de este proyecto partimos de varios supuestos básicos:
 **4.0** Carga de base de Datos
 
 ```{bash}
-cut -d',' -f72,73,87,132,158,182,128,126,191,328,213,79,88,268,44,45,212,59,60,39,46,47,49,48,227,177,189,248,181,197,86 opafy17nid.csv>sentencias2017.csv-- 
+cut -d',' -f72,73,87,132,158,182,128,126,191,328,213,79,88,268,44,45,212,59,60,39,46,47,49,48,227,177,189,248,181,197,86 opafy17nid.csv>sentencias2017.csv--
 ```
 
 **4.1** Inicializar vagrant:
@@ -302,3 +301,8 @@ graph TB
     create_raw_tables--> load_sentencias
     end
 ```
+
+
+<p align="center">
+  <image width="600" height="400" src="https://github.com/C1587S/OffenderDS/blob/master/imagenes/raw.png">
+</p>
