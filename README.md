@@ -1,3 +1,4 @@
+
 # INDIVIDUAL OFFENDER DATASET
 
 * * *
@@ -139,11 +140,13 @@ Para conocer el detalle de las variables seleccionadas, favor remitirse al *Anex
 
 **4.2** Crear la base de datos en SQLite
 
-Una vez situados en la carpeta donde tenemos el *.csv*, con la información a cargar, ejecutamos los siguientes comandos:
+
+A continuación describimos los paso sque seguimos para obtener de manera sencilla los esquemas de las tablas que crearemos. Sin embargo, **no es necesario replicar esta sección**, pues el resultado ya se ha incluido en los archivos del repositorio.
+
+Nos situamos en la carpeta donde tenemos el *.csv*, con la información a cargar y ejecutamos los siguientes comandos:
 
 ```
-    ➜  ~ cd /
-    ➜  / cd data/sentencias
+    ➜  ~ cd /data/OffenderDS/sentencias
 ```
 
 Una vez ahí, vemos que nuestro cursor ha cambiado a `➜  sentencias` . Ahora, creamos la base `sentencias.db`.
@@ -165,7 +168,7 @@ Vemos que el cursor cambia a `sqlite>`. Importamos el .csv que hemos preparado e
 Con esto podemos actualizar el archivo
 create_raw_tables.sql, ubicado dentro de la carpeta data/sentencias/sql.
 
-Usamos `Ctrl + D`,  para salir de SQLiteel cursor vuelve a ser `➜  sentencias`.
+Usamos `Ctrl + D`,  para salir de SQLite el cursor vuelve a ser `➜  sentencias`.
 
 
 **4.3** Creación de base de datos en PostgreSQL
@@ -198,7 +201,7 @@ Para ver los roles actualmente creados en el servidor postgres usamos:
 
 `postgres=# \du+`
 
-Usamos Ctrl + D, dos veces para volver a vagrant. El cursor es de nuevo `➜  sentencias`
+Usamos `Ctrl + D`, dos veces para volver a vagrant. El cursor es de nuevo `➜  sentencias`
 
 **4.4.** Ambiente virtual
 
@@ -221,11 +224,17 @@ Nuestro cursor ahora ha cambiado a `(sentencias) ➜  sentencias`.
 
 **4.6.** Creación de esquemas y tablas raw
 
-Ya que hemos actualizado el archivo sentencias.py, lo llamamos para crear los esquemas y tablas raw, mismas que poblamos :
+Actualizamos el archivo sentencias.py:
+
+*  añadiendo las conexiones a la base de datos en cada función
+*  cambiando la extensión de los archivos a cargar ( a *csv*)
+*  actualizando el carácter separador (coma)
+
+
+ lo llamamos para crear los esquemas y tablas raw, mismas que poblamos :
 
     python sentencias.py
     python sentencias.py create-schemas
-    python sentencias.py create-raw-tables
     python sentencias.py create-raw-tables
     python sentencias.py load-sentencias
 
@@ -247,9 +256,21 @@ Verificamos que hay información en la tabla:
 
 Salimos con `Q`
 
-Salimos de postgres (`Ctrl+D`) para comenzar la carga de _cleaned_
+Salimos de postgres (`Ctrl+D`) para comenzar la carga de _cleaned_ , apoyándonos en las funciones de helpers.sql:
 
+     python sentencias.py helpers
      python sentencias.py to-cleaned
+
+Ahora podemos volver a conectarnos a la base de datos:
+```
+psql -U sentencias -d sentencias -h 0.0.0.0 -W
+```
+
+Y verificamos la tabla creada en cleaned:
+```
+select * from cleaned.sentencias2017 limit 3;
+```
+		
 
 </div>
 
@@ -370,3 +391,5 @@ Dicha pregunta nos resulta interesante y a la vez polémica, por lo que se reali
 
 
 <p align="justify">
+
+
