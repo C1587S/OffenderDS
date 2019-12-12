@@ -24,7 +24,7 @@ Este proyecto cuenta con licencia conforme a los términos de la licencia MIT.
 -   [x] Cargar la base de datos a raw
 -   [x] Crear una versión limpia en cleaned
 -   [x] Crear el esquema semantic
--   [ ] Crear features temporales ligados a la entidad dadas las fechas del evento. Guardarlos en el esquema features().
+-   [ ] Crear features temporales ligados a la entidad dadas las fechas del evento. Guardarlos en el esquema features.
     </div>
 
 **Índice:**
@@ -58,7 +58,7 @@ No incluye sentencias relativas a:
 -   apelaciones;
 -   acusados que NO fueron culpables de todos los cargos.
 
-_Para esta etapa del proyecto, **únicamente emplearemos la base de datos correspondiente al año fiscal 2017**, misma que cuenta con `65,534` registros de sentencias._
+_Para esta etapa del proyecto, **únicamente emplearemos la base de datos correspondiente al año fiscal 2017**, misma que cuenta con `66,873` registros de sentencias._
 
 <a name="SOBRE"></a>
 
@@ -108,7 +108,7 @@ En la realización de este proyecto partimos de varios supuestos básicos:
 
 **3.1.** Cada registro, correspondiente a las sentencias emitidas en un año fiscal determinado, corresponden a uno y SOLO UN acusado. Es decir, más de una sentencia en un mismo año no puede corresponder al mismo acusado. Con ese supuesto inicial, pero necesario, echamos a andar el _workflow_ de trabajo.
 
-**3.2.** Al no contar con el día exacto de la sentencia (únicamente tenemos el mes y el año de cada sentencia), consideramos el primer día de cada mes como el día de la sentencia; dicha inclusión nos fue útil para la construcción de la variable _sentencing_date_, insumo principal para el la construcción de eventos, asociadas a la entidad.
+**3.2.** Al no contar con el día exacto de la sentencia (únicamente tenemos el mes y el año de cada sentencia), consideramos el primer día de cada mes como el día de la sentencia; dicha inclusión nos fue útil para la construcción de la variable _sentencing_date_, variable principal para el la construcción de eventos, asociadas a la entidad.
 
 **3.3** Al no contar con el día exacto de nacimiento de la entidad (acusado) (únicamente tenemos el mes y el año de cada acusado), consideramos el primer día de cada mes como el día de nacimiento; dicha inclusión nos fue útil para la construcción de la variable _birth_date_.
 
@@ -127,6 +127,8 @@ cut -d',' -f72,73,87,132,158,182,128,126,191,328,213,79,
 88,268,44,45,212,59,60,39,46,47,49,48,227,177,
 189,248,181,197,86 opafy17nid.csv>sentencias2017.csv--
 ```
+
+Para conocer el detalle de las variables seleccionadas, favor remitirse al *Anexo 1.*
 
 **4.1** Inicializar vagrant:
 
@@ -161,7 +163,7 @@ Vemos que el cursor cambia a `sqlite>`. Importamos el .csv que hemos preparado e
 ```
 
 Con esto podemos actualizar el archivo
-create_raw_tables.sql, ubicado dentro de la carpeta data/sentencias.
+create_raw_tables.sql, ubicado dentro de la carpeta data/sentencias/sql.
 
 Usamos `Ctrl + D`,  para salir de SQLiteel cursor vuelve a ser `➜  sentencias`.
 
@@ -277,9 +279,15 @@ select * from semantic.entities limit 3
 **4.8. Tarea futura: feature and Cohorts**
 
 <div align="justify">
-condenados que estuvieran presos hace tres meses o cimientos, que sean extranjeros
+Construimos la estructura de *semantic* tomando como entidades a los *offenders* y, como eventos, a los sucesos en dimensión espacio-temporal que le suceden a los mismos, dada nuestra pregunta de investigación. En particular, ¿cuántos sentenciados tendrán una condena activa en los próximos seis meses para los diferentes estados?
 
-filtrado, cuantos van a terminar en los siguientes seis meses.
+Lo anterior, resulta relevante en la medida que, como se presentó anteriormente, el sistema penitenciario de Estados Unidos presenta graves problemas de hacinamiento en sus cárceles. Por lo cual, es importante para las administraciones de cada estado mantener un registro detallado del número de presos, y más aún, anticipar cuántas plazas por cárcel necesitará en el futuro con el fin de mejorar la gestión de recursos.
+
+El esquema implementado, plantea las bases para desarrollar el problema mencionado, por medio de la especificación de distintas queries, y el futuro diseño de los esquemas del problema.
+
+Por otor lado, en el diseño de los esquemas `cohorts` y `features`.  una pregunta de investigación adicional que surge del contexto presentado resulta de analizar que la tercera parte de la población carcelaria en EEUU es negra, y otra gran proporción corresponde a migrantes. En este sentido, también quisieramos responder ¿en los próximos 6 meses cuántos extranjeros tendran sentencias de prisión activas? Determinar dicho pronóstico permite a las autoridades anticipar la gestión de recursos no solo a nivel local, sino también en torno a políticas migratorias.
+
+Dicha pregunta nos resulta interesante y a la vez polémica, por lo que se realizará un desarrollo de la misma en una extensión de este proyecto en la clase de _Ciencia de datos para Políticas públicas_.
 
 
 </div>
@@ -290,13 +298,13 @@ filtrado, cuantos van a terminar en los siguientes seis meses.
 *Anexo 1. Variables de la tabla en formato .raw*
 
 <p align="center">
-  <image width="300" height="600" src="https://github.com/C1587S/OffenderDS/blob/master/imagenes/raw.png">
+  <image width="200" height="600" src="https://github.com/C1587S/OffenderDS/blob/master/imagenes/raw.png">
 </p>
 
 *Anexo 2. Variables de la tabla en formato .cleaned*
 
 <p align="center">
-  <image width="300" height="600" src="https://github.com/C1587S/OffenderDS/blob/master/imagenes/raw.png">
+  <image width="200" height="600" src="https://github.com/C1587S/OffenderDS/blob/master/imagenes/raw.png">
 </p>
 
 *Anexo 3. Lista de Schemas*
