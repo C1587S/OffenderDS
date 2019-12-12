@@ -141,7 +141,7 @@ Para conocer el detalle de las variables seleccionadas, favor remitirse al *Anex
 **4.2** Crear la base de datos en SQLite
 
 
-A continuación describimos los paso sque seguimos para obtener de manera sencilla los esquemas de las tablas que crearemos. Sin embargo, **no es necesario replicar esta sección**, pues el resultado ya se ha incluido en los archivos del repositorio.
+A continuación describimos los pasos que seguimos para obtener de manera sencilla los esquemas de las tablas que crearemos. Sin embargo, **no es necesario replicar esta sección**, pues el resultado ya se ha incluido en los archivos del repositorio.
 
 Nos situamos en la carpeta donde tenemos el *.csv*, con la información a cargar y ejecutamos los siguientes comandos:
 
@@ -168,7 +168,7 @@ Vemos que el cursor cambia a `sqlite>`. Importamos el .csv que hemos preparado e
 Con esto podemos actualizar el archivo
 create_raw_tables.sql, ubicado dentro de la carpeta data/sentencias/sql.
 
-Usamos `Ctrl + D`,  para salir de SQLite el cursor vuelve a ser `➜  sentencias`.
+Usamos `Ctrl + D`,  para salir de SQLite y el cursor vuelve a ser `➜  sentencias`.
 
 
 **4.3** Creación de base de datos en PostgreSQL
@@ -256,6 +256,8 @@ Verificamos que hay información en la tabla:
 
 Salimos con `Q`
 
+**4.7.** Creando el *query* de cleaned									  
+
 Salimos de postgres (`Ctrl+D`) para comenzar la carga de _cleaned_ , apoyándonos en las funciones de helpers.sql:
 
      python sentencias.py helpers
@@ -266,28 +268,38 @@ Ahora podemos volver a conectarnos a la base de datos:
 psql -U sentencias -d sentencias -h 0.0.0.0 -W
 ```
 
-Y verificamos la tabla creada en cleaned:
+Y verificamos que la tabla ha sido creada en cleaned:
+
+    sentencias-> \dt cleaned.
+
+Y comprobamos que contiene información:					
+
 ```
 select * from cleaned.sentencias2017 limit 3;
 ```
-		
 
 </div>
 
-**4.7.** Creando el *query* de semantic
+**4.8.** Creando el *query* de semantic
 
+
+Desde vagrant ejecutamos:
 
 ```
 python sentencias.py to-semantic
 ```
-
+Volvemos a conectarnos a la base de datos en postgres:
 ```
 psql- U sentencias -d sentencias -h 0.0.0.0 -W
 ```
 Para acceder a la base ya con las tablas entidades cargadas y de eventos también
 
+Verificamos las tablas creadas:
+
+    sentencias-> \dt semantic.				
+
 ```
-select * from semantic.entities limit 3
+select * from semantic.entities limit 3;
 ````
 *Ejemplo de output*
 |offender|country_citizenship|birth_date|genre|race|
@@ -297,7 +309,7 @@ select * from semantic.entities limit 3
 |3|mexico|1992-06-01|male|american indian or alaskan native|
 
 
-**4.8. Tarea futura: feature and Cohorts**
+**4.9. Tarea futura: feature and Cohorts**
 
 <div align="justify">
 Construimos la estructura de *semantic* tomando como entidades a los *offenders* y, como eventos, a los sucesos en dimensión espacio-temporal que le suceden a los mismos, dada nuestra pregunta de investigación. En particular, ¿cuántos sentenciados tendrán una condena activa en los próximos seis meses para los diferentes estados?
@@ -325,7 +337,7 @@ Dicha pregunta nos resulta interesante y a la vez polémica, por lo que se reali
 *Anexo 2. Variables de la tabla en formato .cleaned*
 
 <p align="center">
-  <image width="200" height="600" src="https://github.com/C1587S/OffenderDS/blob/master/imagenes/raw.png">
+  <image width="200" height="600" src="https://github.com/C1587S/OffenderDS/blob/master/imagenes/clean.png">
 </p>
 
 *Anexo 3. Lista de Schemas*
@@ -379,11 +391,11 @@ Dicha pregunta nos resulta interesante y a la vez polémica, por lo que se reali
 
 | categorías de la variable sentence_type | nombre de la variable asociada en raw o valor de asociado | nombre de la variable asociada en clean         |
 | --------------------------------------- | ------------------------------------- | ----------------------------------------------- |
-|0. No prison/probation (fine only)| -|-|
-| 1. prison only                          | SENTOT| imprisonment_length                                        |                                                 |
-| 2. prison + confinement                 | sensplt                               | sensplt                                         |
-| 3. probation +confinement               | senplt0 minus sentot                  | total_sentence_length minus imprisonment_length |
-| 4. probation only                       | sensplot0=0                           | total_sentence_length=0                         |
+| 0. No prison/probation (fine only)| -|-|
+| 1. prison only                          | SENTTOT| imprisonment_length                                        |                                                 |
+| 2. prison + confinement                 | SENSPLT                               | sensplt                                         |
+| 3. probation +confinement               | SENPLT0 minus SENTTOT                  | total_sentence_length minus imprisonment_length |
+| 4. probation only                       | SENSPLT0=0                           | total_sentence_length=0                         |
 
 
 <center>
@@ -393,3 +405,37 @@ Dicha pregunta nos resulta interesante y a la vez polémica, por lo que se reali
 <p align="justify">
 
 
+*Anexo 10. Descripción de las variables seleccionadas para raw y su correspondiente en cleaned*
+
+| Columnas raw 	| Columnas cleaned |Description                                                                                                                                                                                                                                                                                               	| Range                  	|
+|-----------	|-|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|------------------------	|
+| AMTTOTAL  	| total_amount                  | Sum of the imposed dollar amounts of fine (FINE), cost of supervision (COSTSUP), and restitution (TOTREST).                                                                                                                                                                                               	| 0 thru $9,999,999,996  	|
+| SENTTOT   	| imprisonment_length           | The total prison sentence (excluding months of alternative confinement), in months, without zeros (probation). Zero terms and missing cases are set to "á".                                                                                                                                               	| 0.01 thru 9997         	|
+| SENTTOT0  	| senttot0                      | The total prison sentence (excluding months of alternative confinement), in months, with zeros (probation).                                                                                                                                                                                               	| 0 thru 9997            	|
+| SENSPLT   	| sensplt                       | The total prison sentence, in months, plus alternatives, without zeros (probation).                                                                                                                                                                                                                       	| 0.01 thru 9997         	|
+| SENSPLT0  	| total_sentence_length         | The total prison sentence, in months, plus alternatives, with zeros (probation). Missing terms are set to "á" . This field includes sentences of time imposed, time served, and ¤5G1.3 credit.                                                                                                            	| 0 thru 9997            	|
+| TIMSERVC  	| credited_months               | This is the total amount of time (in months) credited to the offender by the judge at the time of sentencing. It is attributed because the offender either remained in custody between arrest and sentencing or because the offender is serving time in state prison on a related charge. T               	| 0 thru 990 Months      	|
+| TIMESERV  	| estimated_prison_time         | USSC estimated prison time the defendant will serve based on a mathematical formula. T                                                                                                                                                                                                                    	| 0.00 thru 1,500 Months 	|
+| ALTDUM    	| alternative_sentence          | Dummy indicator of alternative sentence (home detention, community confinement, or intermittent confinement), as defined in ¤5C1.1. This variable is Òyes" when any of the alternative fields is coded as Ò97Ó to indicate that the alternative was specified, but the exact number of months is unknown. 	| 0 - 1                  	|
+| ALTMO     	| alternative_time              | Total months of alternative incarceration (includes home detention, community confinement, and intermittent confinement).                                                                                                                                                                                 	| 0 thru 96              	|
+| CITIZEN   	| citizenship_status            | Identifies the nature of defendant's citizenship with respect to the United States.                                                                                                                                                                                                                       	| 0 - 5                  	|
+| CITWHERE  	| country_citizenship           | Identifies the defendant's country of citizenship.                                                                                                                                                                                                                                                        	| 20 thru 216            	|
+| CRIMHIST  	| criminal_history              | Yes, There is Criminal History Missing, Indeterminable, orInapplicableIndication as to whether the defendant has any criminal history or law enforcement contacts, including behavior that is not eligible for the application of criminal history points (e.g. arrests).                                 	| 0-1                    	|
+| DISPOSIT  	| sentence_disposition          | Disposition of the defendant's case.Note that if there is information that the case went to trial but it does not specify whether the trial was a jury trial or a bench trial, then USSC assumes jury trial since these are more common.                                                                  	| 0-5                    	|
+| DISTRICT  	| district_sentence             | The district in which the defendant was sentenced. Use CIRCDIST for the districts in the same order in which they appear in the Sourcebook.                                                                                                                                                               	| 00 thru 96             	|
+| DOBMON    	| birth_month                   | The defendant's month of birth. Field not on datafiles prior to FY2005. NO FORMAT.                                                                                                                                                                                                                        	| 1 a 12                 	|
+| EDUCATN   	| non_prison_sentence           | Indicates the highest level of education completed by the defendant.                                                                                                                                                                                                                                      	| see coide attachment   	|
+| HISPORIG  	| genre                         | Offender's ethnic origin. See MONRACE for race of the offender.                                                                                                                                                                                                                                           	| 0,1,2                  	|
+| INOUT     	| education_level               | Indicates whether a defendant received a prison sentence (for defendants who were eligible for non-prison sentences). This variable is similar to PRISDUM but considers who is eligible for non-prison sentences.                                                                                         	| 0-1                    	|
+| MONSEX    	| race                          | Indicates the offender's gender.                                                                                                                                                                                                                                                                          	| 0, 1                   	|
+| NEWEDUC   	| num_dependents                | Highest level of education for offender (Recode of EDUCATN for the Sourcebook of Federal Sentencing Statistics publication).                                                                                                                                                                              	| 1, 2 , 3, 6..          	|
+| NEWRACE   	| offense_type                  | Race of defendant (Recode of MONRACE and HISPORIG for the Sourcebook of Federal Sentencing Statistics publication).                                                                                                                                                                                       	| 1, 2 , 3, 6..          	|
+| NUMDEPEN  	| presentence_detention_status  | Number of dependents whom the offender supports (excluding self).                                                                                                                                                                                                                                         	| 1 a 96                 	|
+| OFFTYPSB  	| sentence_type                 | Primary offense type for the case generated from the count of conviction with the highest statutory maximum (in case of a tie, the count with the highest statutory minimum is used)                                                                                                                      	|                        	|
+| PRESENT   	| sentencing_month              | Offender's pre-sentence detention status.                                                                                                                                                                                                                                                                 	| 1-4É                   	|
+| SENTIMP   	| sentence_type_other           | Indicates what type of sentence was given (prison, probation, probation plus alternatives, or prison/split sentence).                                                                                                                                                                                     	| 0-4                    	|
+| SENTMON   	| age_range                     | Sentencing month. Generated from SENTDATE.                                                                                                                                                                                                                                                                	| 1 a 12                 	|
+| TYPEOTHS  	| birth_year                    | Other types of sentences ordered.                                                                                                                                                                                                                                                                         	| categories             	|
+| YEARS     	| sentencing_year               | Categories of age ranges (Recode of AGE for USSC Sourcebook).                                                                                                                                                                                                                                             	| 1-5, categories        	|
+| DOBYR     	| sentencing_date               | The defendant's year of birth. Field not on datafiles prior to FY2005.NO SAS FORMAT.                                                                                                                                                                                                                      	| Valid years since 1920 	|
+| SENTYR    	| sentencing_end_date           | Sentencing year. Generated from SENTDATE.                                                                                                                                                                                                                                                                 	| Applicable Fiscal Year 	|
